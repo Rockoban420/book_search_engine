@@ -16,9 +16,18 @@ import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useMutation(USER);
   const [removeBook, { error, data }] = useMutation(REMOVE_BOOK, {
-    refetchQueries: [USER]
+    update(cache, { data: { removeBook } }) {
+      try {
+        cache.writeQuery({
+          query: USER,
+          data: { me: removeBook },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    },
   });
 
   // use this to determine if `useEffect()` hook needs to run again
@@ -41,7 +50,10 @@ const SavedBooks = () => {
         throw new Error('something went wrong!');
       }
 
+      console.log(response);
+
       const updatedUser = await response.json();
+      console.log(updatedUser);
       setUserData(updatedUser);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
