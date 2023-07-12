@@ -35,38 +35,6 @@ const SavedBooks = () => {
     return <div>Error! {error2.message}</div>;
   }
 
-  // const userDataLength = Object.keys(userData).length;
-
-  // useEffect(() => {
-  //     try {
-  //       const token = Auth.loggedIn() ? Auth.getToken() : localStorage.getItem('id_token');
-
-  //       if (!token) {
-  //         return false;
-  //       }
-
-  //       console.log(Auth.getProfile());
-
-  //       const { loading, error2, data2 } = useQuery(
-  //         USER ? USER : USER_ME,
-  //         { variables: { userID: Auth.getProfile().data._id } }
-  //       );
-
-  //       if (error2) {
-  //         console.log(error2);
-  //         throw new Error('something went wrong!');
-  //       }
-
-  //       console.log(data2);
-        
-  //       setUserData(data2);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  // }, [userDataLength]);
-  // use this to determine if `useEffect()` hook needs to run again
-
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -83,11 +51,6 @@ const SavedBooks = () => {
         throw new Error('something went wrong!');
       }
 
-      console.log(response);
-
-      const updatedUser = await response.json();
-      console.log(updatedUser);
-      // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
       console.error(err);
