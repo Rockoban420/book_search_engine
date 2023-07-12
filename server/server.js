@@ -11,7 +11,8 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // context: authMiddleware,
+  // context will be called whenever a query or mutation happens and before the resolver is called
+  context: authMiddleware,
 });
 
 app.use(express.urlencoded({ extended: false }));
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV === 'production') {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
+
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
@@ -38,5 +40,5 @@ const startApolloServer = async () => {
   })
   };
   
-  // Call the async function to start the server
+// Call the async function to start the server
   startApolloServer();

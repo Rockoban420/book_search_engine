@@ -9,10 +9,11 @@ import {
 } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API';
 import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import { USER } from '../utils/queries';
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -28,12 +29,14 @@ const SearchBooks = () => {
       try {
         cache.writeQuery({
           query: USER,
-          data: { me: saveBook },
+          user: Auth.getProfile().data._id,
+          __typename: 'User',
+          data: { User: saveBook },
         });
       } catch (e) {
         console.error(e);
       }
-    },
+    }
   });
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
@@ -65,6 +68,7 @@ const SearchBooks = () => {
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
+        link: book.volumeInfo.infoLink
       }));
 
       setSearchedBooks(bookData);
@@ -86,12 +90,17 @@ const SearchBooks = () => {
       return false;
     }
 
+    console.log(bookToSave);
+    console.log(Auth.getProfile().data._id);
+    
     try {
-      const response = await saveBook({
+      const { response } = await saveBook({
         variables: { userID: Auth.getProfile().data._id, ...bookToSave }
       });
 
-      if (!response.ok) {
+      console.log(data);
+
+      if (!response) {
         throw new Error('something went wrong!');
       }
 

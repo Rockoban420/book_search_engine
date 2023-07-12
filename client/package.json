@@ -14,8 +14,9 @@
     "react-bootstrap": "^2.7.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "^5.0.1"
-  },
+    "react-scripts": "^5.0.1",
+    "graphql": "^15.4.0"
+    },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
