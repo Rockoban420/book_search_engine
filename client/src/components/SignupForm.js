@@ -35,17 +35,15 @@ const SignupForm = () => {
         variables: { ...userFormData },
       });
 
-      if (!response) {
-        throw new Error('something went wrong!');
-      }
-
       if (error) {
+        setShowAlert(true);
+        console.log(error);
         throw new Error('something went wrong!');
       }
 
       console.log(data);
       console.log(response);
-      Auth.login(response.token);
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.log(err);
       setShowAlert(true);
